@@ -69,7 +69,10 @@ var http = require('http');
 var url = require('url');
 var dt = require('./datetime');
 var dice = require('./diceRoller');
-var cors = require('cors');
+const cors = require('cors');
+const express = require('express');
+
+const app = express();
 
 const server = http.createServer((request, response) => {
     response.setHeader('Access-Control-Allow-Origin', '*'); // Allow CORS (Adjust as needed)
@@ -88,13 +91,12 @@ const server = http.createServer((request, response) => {
     }
 });
 
+app.use(cors({
+    origin: "*", // Allow all origins
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+}));
+
 const port = process.env.PORT || 1337;
 server.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
-
-App.use(
-    Cors({
-        Origin:"*"
-        Methods:['GET','POST','PUT','DELETE']
-}));
