@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test Page</title>
+</head>
+  
+<body>
+    <h2>Dice Roller API</h2>
+    <button onclick="testAPI()">Roll a Dice</button>
+    <p id="result"></p>
+
+    <script>
+        function testAPI() {
+            fetch('https://your-api.azurewebsites.net/roll-dice?sides=6')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('result').innerText = "API Response: " + JSON.stringify(data);
+                })
+                .catch(error => console.error("Error:", error));
+        }
+    </script>
+</body>
+</html>
