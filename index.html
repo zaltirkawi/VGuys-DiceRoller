@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -23,3 +23,35 @@
     </script>
 </body>
 </html>
+ -->
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Tester</title>
+    <script>
+        async function testAPI(endpoint) {
+            try {
+                let response = await fetch(endpoint);
+                let data = await response.json();
+                document.getElementById('output').innerText = JSON.stringify(data, null, 2);
+            } catch (error) {
+                document.getElementById('output').innerText = 'CORS Error or Server Down';
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>API Tester</h1>
+    <button onclick="testAPI('/api/time')">Get Server Time</button>
+    <button onclick="testAPI('/api/roll-dice?sides=6')">Roll a 6-Sided Dice</button>
+    <pre id="output"></pre>
+</body>
+</html>
+
+// config.json
+{
+    "serverPort": 1337
+}
