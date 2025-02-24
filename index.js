@@ -32,35 +32,69 @@
 
 // console.log("Server running at http://localhost:%d", port);
 
+// var http = require('http');
+// var url = require('url');
+// var dt = require('./datetime');
+
+// const server = http.createServer((request, response) => {
+//     const parsedUrl = url.parse(request.url, true);
+//     const pathname = parsedUrl.pathname;
+
+//     console.log(`Request received: ${request.url}`);
+
+//     if (pathname === '/roll-dice') {
+//         // Extract number of sides (default to 6)
+//         const sides = parsedUrl.query.sides ? parseInt(parsedUrl.query.sides) : 6;
+//         const result = Math.floor(Math.random() * sides) + 1;
+
+//         response.writeHead(200, { 'Content-Type': 'application/json' });
+//         response.end(JSON.stringify({ roll: result }));
+//         return;
+//     }
+
+//     // API Test Page
+//     response.writeHead(200, { 'Content-Type': 'text/html' });
+//     response.write('<h3>Hello! This is your Dice Roller API</h3>');
+//     response.write("Current date and time: " + dt.myDateTime() + "<br><br>");
+//     response.write("Test API by adding <code>/roll-dice?sides=6</code> to the URL.");
+//     response.end();
+// });
+
+// const port = process.env.PORT || 1337;
+// server.listen(port, () => {
+//     console.log(`Server running at http://localhost:${port}`);
+// });
+
 var http = require('http');
 var url = require('url');
 var dt = require('./datetime');
+var dice = require('./diceRoller');
+var cors = require('cors');
 
 const server = http.createServer((request, response) => {
-    const parsedUrl = url.parse(request.url, true);
-    const pathname = parsedUrl.pathname;
-
-    console.log(`Request received: ${request.url}`);
-
-    if (pathname === '/roll-dice') {
-        // Extract number of sides (default to 6)
-        const sides = parsedUrl.query.sides ? parseInt(parsedUrl.query.sides) : 6;
-        const result = Math.floor(Math.random() * sides) + 1;
-
-        response.writeHead(200, { 'Content-Type': 'application/json' });
-        response.end(JSON.stringify({ roll: result }));
-        return;
+    response.setHeader('Access-Control-Allow-Origin', '*'); // Allow CORS (Adjust as needed)
+    response.setHeader('Content-Type', 'application/json');
+    
+    var q = url.parse(request.url, true);
+    
+    if (q.pathname === '/api/time') {
+        response.end(JSON.stringify({ time: dt.myDateTime() }));
+    } else if (q.pathname === '/api/roll-dice') {
+        let sides = parseInt(q.query.sides) || 6;
+        response.end(JSON.stringify({ result: dice.rollDice(sides) }));
+    } else {
+        response.writeHead(404);
+        response.end(JSON.stringify({ error: 'Endpoint not found' }));
     }
-
-    // API Test Page
-    response.writeHead(200, { 'Content-Type': 'text/html' });
-    response.write('<h3>Hello! This is your Dice Roller API</h3>');
-    response.write("Current date and time: " + dt.myDateTime() + "<br><br>");
-    response.write("Test API by adding <code>/roll-dice?sides=6</code> to the URL.");
-    response.end();
 });
 
 const port = process.env.PORT || 1337;
 server.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
+
+App.use(
+    Cors({
+        Origin:"*"
+        Methods:['GET','POST','PUT','DELETE']
+}));
