@@ -62,7 +62,7 @@ const server = http.createServer((request, response) => {
 
 app.use(cors({
     origin: "*", // Allow all origins
-    methods: ['GET', 'POST', 'PUT', 'DELETE']
+    methods: ['GET', 'POST', 'PUT']
 }));
 
 const port = process.env.PORT || 1337;
