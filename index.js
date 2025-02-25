@@ -60,10 +60,17 @@ const server = http.createServer((request, response) => {
     response.end();
 });
 
-app.use(cors({
-    // origin: "*", // Allow all origins
-    methods: ['GET', 'POST', 'PUT', 'DELETE']
-}));
+// app.use(cors({
+//     origin: "*", // Allow all origins
+//     methods: ['GET', 'POST', 'PUT', 'DELETE']
+// }));
+
+http.createServer(function (request, response) {
+response.writeHead(200, {
+    'Content-Type': 'text/plain',
+    'Access-Control-Allow-Origin' : '*',
+    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
+});
 
 const port = process.env.PORT || 1337;
 server.listen(port, () => {
