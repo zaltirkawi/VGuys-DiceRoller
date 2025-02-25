@@ -60,10 +60,10 @@ const server = http.createServer((request, response) => {
     response.end();
 });
 
-// app.use(cors({
-//     origin: "*", // Allow all origins
-//     methods: ['GET', 'POST', 'PUT', 'DELETE']
-// }));
+app.use(cors({
+    origin: "*", // Allow all origins
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+}));
 
 const port = process.env.PORT || 1337;
 server.listen(port, () => {
