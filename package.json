@@ -6,7 +6,4 @@
     "private": true,
     "license": "MIT",
     "author": "Microsoft",
-    "scripts": {
-        "start": "node index.js"
-    }
 }
