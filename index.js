@@ -112,9 +112,9 @@ const server = http.createServer((request, response) => {
 
     // API Test Page
     response.writeHead(200, { 'Content-Type': 'text/html' });
-    response.write('<h3>Hello! This is your Dice Roller API</h3>');
-    response.write("Current date and time: " + dt.myDateTime() + "<br><br>");
-    response.write("Test API by adding <code>/roll-dice?sides=6</code> to the URL.");
+    response.write('<h3>Hello! This is V Guys Dice Roller API</h3>');
+    response.write("The Current date and time is: " + dt.myDateTime() + "<br><br>");
+    response.write("You can test API by adding <code>/roll-dice?sides=6</code> to the URL.");
     response.end();
 });
 
