@@ -60,10 +60,10 @@ const server = http.createServer((request, response) => {
     response.end();
 });
 
-app.use(cors({
-    origin: "*", // Allow all origins
-    methods: ['GET', 'POST', 'PUT', 'DELETE']
-}));
+// app.use(cors({
+//     origin: "*", // Allow all origins
+//     methods: ['GET', 'POST', 'PUT', 'DELETE']
+// }));
 
 // http.createServer(function (request, response) {
 // response.writeHead(200, {
