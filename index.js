@@ -77,10 +77,11 @@
 //     console.log(`Server running at http://localhost:${port}`);
 // });
 
-var http = require('http');
-var url = require('url');
-var dt = require('./datetime');
-var diceRoller = require('./diceRoller');
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+const url = require('url');
+const dt = require('./datetime');
 
 const server = http.createServer((request, response) => {
     const parsedUrl = url.parse(request.url, true);
@@ -88,34 +89,33 @@ const server = http.createServer((request, response) => {
 
     console.log(`Request received: ${request.url}`);
 
-    // CORS Handling
-    response.setHeader("Access-Control-Allow-Origin", "*"); // Allow all origins (Update later for CORS error)
-    response.setHeader("Content-Type", "application/json");
+    // Serve index.html when accessing the root
+    if (pathname === '/' || pathname === '/index.html') {
+        fs.readFile(path.join(__dirname, 'index.html'), (err, data) => {
+            if (err) {
+                response.writeHead(500, { 'Content-Type': 'text/plain' });
+                response.end('Internal Server Error');
+                return;
+            }
+            response.writeHead(200, { 'Content-Type': 'text/html' });
+            response.end(data);
+        });
+        return;
+    }
 
+    // Dice Roller API
     if (pathname === '/roll-dice') {
-        // Extract number of sides (default to 6)
         const sides = parsedUrl.query.sides ? parseInt(parsedUrl.query.sides) : 6;
-        const result = diceRoller.rollDice(sides);
+        const result = Math.floor(Math.random() * sides) + 1;
 
-        response.writeHead(200);
+        response.writeHead(200, { 'Content-Type': 'application/json' });
         response.end(JSON.stringify({ roll: result }));
         return;
     }
 
-    // CORS Failure Condition (Intentionally Block Requests)
-    if (pathname === "/cors-fail") {
-        response.setHeader("Access-Control-Allow-Origin", "http://some-other-site.com"); // Blocks your frontend
-        response.writeHead(403); // Forbidden response
-        response.end(JSON.stringify({ error: "CORS policy restricts this request" }));
-        return;
-    }
-
-    // API Test Page
-    response.writeHead(200, { 'Content-Type': 'text/html' });
-    response.write('<h3>Hello! This is V Guys Dice Roller API</h3>');
-    response.write("The Current date and time is: " + dt.myDateTime() + "<br><br>");
-    response.write("You can test API by adding <code>/roll-dice?sides=6</code> to the URL.");
-    response.end();
+    // Default response
+    response.writeHead(404, { 'Content-Type': 'text/plain' });
+    response.end('Not Found');
 });
 
 const port = process.env.PORT || 1337;
