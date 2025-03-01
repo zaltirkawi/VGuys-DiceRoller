@@ -77,9 +77,9 @@
 //     console.log(`Server running at http://localhost:${port}`);
 // });
 
-const http = require('http');
 const fs = require('fs');
 const path = require('path');
+const http = require('http');
 const url = require('url');
 const dt = require('./datetime');
 
@@ -89,7 +89,19 @@ const server = http.createServer((request, response) => {
 
     console.log(`Request received: ${request.url}`);
 
-    // Serve index.html when accessing the root
+    // Enable CORS for all requests
+    response.setHeader('Access-Control-Allow-Origin', '*');
+    response.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+    // Handle preflight request for CORS
+    if (request.method === 'OPTIONS') {
+        response.writeHead(204);
+        response.end();
+        return;
+    }
+
+    // Serve index.html for the root path
     if (pathname === '/' || pathname === '/index.html') {
         fs.readFile(path.join(__dirname, 'index.html'), (err, data) => {
             if (err) {
@@ -103,7 +115,7 @@ const server = http.createServer((request, response) => {
         return;
     }
 
-    // Dice Roller API
+    // Dice Roller API Endpoint
     if (pathname === '/roll-dice') {
         const sides = parsedUrl.query.sides ? parseInt(parsedUrl.query.sides) : 6;
         const result = Math.floor(Math.random() * sides) + 1;
@@ -113,7 +125,7 @@ const server = http.createServer((request, response) => {
         return;
     }
 
-    // Default response
+    // Default 404 response
     response.writeHead(404, { 'Content-Type': 'text/plain' });
     response.end('Not Found');
 });
