@@ -65,12 +65,12 @@ const server = http.createServer((request, response) => {
 //     methods: ['GET', 'POST', 'PUT', 'DELETE']
 // }));
 
-http.createServer(function (request, response) {
-response.writeHead(200, {
-    'Content-Type': 'text/plain',
-    'Access-Control-Allow-Origin' : '*',
-    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
-});
+// http.createServer(function (request, response) {
+// response.writeHead(200, {
+//     'Content-Type': 'text/plain',
+//     'Access-Control-Allow-Origin' : '*',
+//     'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE'
+// });
 
 const port = process.env.PORT || 1337;
 server.listen(port, () => {
